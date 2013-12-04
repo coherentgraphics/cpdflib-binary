@@ -32,3 +32,11 @@ cc program.c -o program.exe -Wl,-rpath,. -L. -l:libcpdf.dll -lunix -lbigarray
 Sample linking on OS X with static libraries:
 cc program.c -o program -L. -lcpdf -lunix -lbigarray
 
+
+Documentation
+=============
+
+See cpdflibmanual.pdf, or cpdflibwrapper.h. The documentation for the command
+line tools may be useful too. The command line tools are good for prototyping
+as well.
+

@@ -20,8 +20,7 @@ contact@coherentgraphics.co.uk
 Use
 ===
 
-There is one header file, cpdflibwrapper.h, and depending on platform either
-static libraries or a DLL or both.
+There is one header file, cpdflibwrapper.h, and a static library and DLL(s).
 
 Sample linking on Linux with static libraries:
 cc program.c -o program -L. -lcpdf -lm -ldl

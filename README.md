@@ -21,22 +21,19 @@ Use
 ===
 
 There is one header file, cpdflibwrapper.h, and depending on platform either
-static libraries or a DLL.
+static libraries or a DLL or both.
 
 Sample linking on Linux with static libraries:
-cc program.c -o program -L. -lcpdf -lunix -lbigarray -lm -ldl
+cc program.c -o program -L. -lcpdf -lm -ldl
 
 Sample linking on Windows with DLL:
-cc program.c -o program.exe -Wl,-rpath,. -L. -l:libcpdf.dll -lunix -lbigarray
+cc program.c -o program.exe -Wl,-rpath,. -L. -l:libcpdf.dll
 
 Sample linking on OS X with static libraries:
-cc program.c -o program -L. -lcpdf -lunix -lbigarray
+cc program.c -o program -L. -lcpdf
 
 
 Documentation
 =============
 
-See cpdflibmanual.pdf, or cpdflibwrapper.h. The documentation for the command
-line tools may be useful too. The command line tools are good for prototyping
-as well.
-
+See cpdflibmanual.pdf.

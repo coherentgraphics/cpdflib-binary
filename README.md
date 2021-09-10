@@ -35,6 +35,9 @@ Use with Python
 
 Use pycpdf.py and import Pycpdf.
 
+Instructions for loading the DLLs are included in pycpdflibmanual.pdf, at the
+end of Chapter 1.
+
 
 Documentation
 =============

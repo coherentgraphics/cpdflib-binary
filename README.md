@@ -8,7 +8,7 @@ http://github.com/coherentgraphics/cpdf-binaries
 
 and also in source form.
 
-The website for commercial sales of the Command Line Tools and C and Pythonm APIs is
+The website for commercial sales of the Command Line Tools and C and Python APIs is
 
 http://www.coherentpdf.com/
 

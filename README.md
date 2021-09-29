@@ -8,7 +8,8 @@ http://github.com/coherentgraphics/cpdf-binaries
 
 and also in source form.
 
-The website for commercial sales of the Command Line Tools and C and Python APIs is
+The website for commercial sales of the Command Line Tools and C and Python
+APIs is
 
 http://www.coherentpdf.com/
 
@@ -33,12 +34,14 @@ cc program.c -o program -L. -lcpdf
 Use with Python
 ===============
 
-Use pycpdf.py and import Pycpdf.
+Use pycpdflib.py and import Pycpdflib. Or run "pip install pycpdflib" (just
+installs pycpdflib.py).
 
 Instructions for loading the DLLs are included in pycpdflibmanual.pdf, at the
 end of Chapter 1.
 
-The API documentation is online at https://python-libcpdf.readthedocs.io/en/latest/
+The API documentation is online at
+https://python-libcpdf.readthedocs.io/en/latest/
 
 
 Documentation
@@ -46,6 +49,7 @@ Documentation
 
 See cpdflibmanual.pdf for C and pycpdflibmanual.pdf for Python.
 
-Python API docs are also online, to be read in conjunction with pycpdflibmanual.pdf.
+Python API docs are also online, to be read in conjunction with
+pycpdflibmanual.pdf.
 
 https://python-libcpdf.readthedocs.io/en/latest/

@@ -9,15 +9,100 @@ install_name_tool command to tell libpycpdf.so where to find libcpdf.so.
 
 A 'range' is a list of integers specifying page numbers.
 
-Text arguments and results are in UTF8.
+Text arguments and results are in UTF8. Data is of type 'bytes'.
 
 Any function may raise the exception CPDFError, carrying a string describing
 the error.
+
 """
+
+"""
+Loading the libpypcdf and libcpdf DLLs
+--------------------------------------
+
+Before using the library, you must load the ``libpycpdf`` and ``libcpdf`` DLLs.
+This is achieved with the ``pycpdflib.loadDLL`` function, given the filename or
+full path of the ``libpycpdf`` DLL.
+
+On Windows, you may have to call ``os.add_dll_directory`` first. On MacOS, you
+may need to give the full path, and you may need to install ``libcpdf.so`` in a
+standard location ``/usr/local/lib/``, or use the ``install_name_tool`` command
+to tell ``libpycpdf.so`` where to find ``libcpdf.so``.
+
+Conventions
+-----------
+
+Any function may raise the exception ``CPDFError``, carrying a string describing
+the error.
+
+A 'range' is a list of integers specifying page numbers. Page numbers start at
+1. Range arguments are called `r`.
+
+Text arguments and results are in UTF8.
+
+Units are in PDF points (1/72 inch).
+
+Angles are in degrees.
+
+
+Built-in values
+---------------
+
+Paper sizes:
+
+a0portrait a1portrait a2portrait a3portrait a4portrait a5portrait a0landscape
+a1landscape a2landscape a3landscape a4landscape a5landscape usletterportrait
+usletterlandscape uslegalportrait uslegallandscape
+
+Permissions:
+
+noEdit noPrint noCopy noAnnot noForms noExtract noAssemble noHqPrint
+
+Encryption methods:
+
+pdf40bit pdf128bit aes128bitfalse aes128bittrue aes256bitfalse aes256bittrue
+aes256bitisofalse aes256bitisotrue
+
+Positions:
+
+Positions with two numbers in a tuple e.g (posLeft, 10.0, 20.0)
+
+posCentre posLeft posRight
+
+Positions with one number in a tuple e.g (top, 5.0)
+
+top topLeft topRight left bottomLeft bottomRight right
+
+Positions with no numbers e.g diagonal
+
+diagonal reverseDiagonal
+
+Fonts:
+
+timesRoman timesBold timesItalic timesBoldItalic helvetica helveticaBold
+helveticaOblique helveticaBoldOblique courier courierBold courierOblique
+courierBoldOblique
+
+Justification:
+
+leftJustify centreJustify rightJustify
+
+Page layouts:
+
+singlePage oneColumn twoColumnLeft twoColumnRight twoPageLeft twoPageRight
+
+Page modes:
+
+useNone useOutlines useThumbs useOC useAttachments
+
+Page label styles:
+
+decimalArabic uppercaseRoman lowercaseRoman uppercaseLetters lowercaseLetters
+"""
+
 
 from ctypes import *
 import sys
-
 libc = None
 
 # CHAPTER 0. Preliminaries
@@ -39,9 +124,15 @@ def loadDLL(f):
     called prior to using any other function in the library."""
     global libc
     libc = CDLL(f)
+    libc.pycpdf_tableOfContents.argtypes = [
+        c_int, c_int, c_double, POINTER(c_char), c_int]
     libc.pycpdf_version.restype = POINTER(c_char)
     libc.pycpdf_lastErrorString.restype = POINTER(c_char)
     libc.pycpdf_blankDocument.argtypes = [c_double, c_double, c_int]
+    libc.pycpdf_textToPDF.argtypes = [
+        c_double, c_double, c_int, c_double, POINTER(c_char)]
+    libc.pycpdf_textToPDFPaper.argtypes = [
+        c_int, c_int, c_double, POINTER(c_char)]
     libc.pycpdf_ptOfCm.argtypes = [c_double]
     libc.pycpdf_ptOfCm.restype = c_double
     libc.pycpdf_ptOfMm.argtypes = [c_double]
@@ -56,6 +147,9 @@ def loadDLL(f):
     libc.pycpdf_inOfPt.restype = c_double
     libc.pycpdf_stringOfPagespec.restype = POINTER(c_char)
     libc.pycpdf_toMemory.restype = POINTER(c_uint8)
+    libc.pycpdf_outputJSONMemory.restype = POINTER(c_uint8)
+    libc.pycpdf_annotationsJSON.restype = POINTER(c_uint8)
+    libc.pycpdf_getBookmarksJSON.restype = POINTER(c_uint8)
     libc.pycpdf_scalePages.argtypes = [c_int, c_int, c_double, c_double]
     libc.pycpdf_scaleToFit.argtypes =\
         [c_int, c_int, c_double, c_double, c_double]
@@ -104,8 +198,9 @@ def loadDLL(f):
         [c_int, c_int, POINTER(c_char), c_int, c_double,
          c_double, c_int, c_double]
     libc.pycpdf_getMetadata.restype = POINTER(c_uint8)
+    libc.pycpdf_getDictEntries.restype = POINTER(c_uint8)
     libc.pycpdf_getAttachmentData.restype = POINTER(c_uint8)
-    libc.pycpdf_getAttachmentName.restype = POINTER(c_uint8)
+    libc.pycpdf_getAttachmentName.restype = POINTER(c_char)
     libc.pycpdf_startGetImageResolution.argtypes = [c_int, c_double]
     libc.pycpdf_getImageResolutionImageName.restype = POINTER(c_char)
     libc.pycpdf_getFontName.restype = POINTER(c_char)
@@ -119,6 +214,8 @@ def loadDLL(f):
         c_int, c_int, c_int, c_int, c_int, c_int, c_double, c_double, c_int]
     libc.pycpdf_getImageResolutionXRes.restype = c_double
     libc.pycpdf_getImageResolutionYRes.restype = c_double
+    libc.pycpdf_impose.argtypes = [c_int, c_double, c_double, c_int,
+                                   c_int, c_int, c_int, c_int, c_double, c_double, c_double]
     LP_c_char = POINTER(c_char)
     LP_LP_c_char = POINTER(LP_c_char)
     argc = len(sys.argv)
@@ -236,42 +333,6 @@ def fromMemoryLazy(data, userpw):
     pdf = Pdf(libc.pycpdf_fromMemoryLazy(data, len(data), str.encode(userpw)))
     checkerror()
     return pdf
-
-
-def blankDocument(w, h, pages):
-    """ Create a blank document
-    with pages of the given width (in points), height (in points), and number
-    of pages."""
-    pdf = Pdf(libc.pycpdf_blankDocument(w, h, pages))
-    checkerror()
-    return pdf
-
-
-"""Paper sizes."""
-a0portrait = 0
-a1portrait = 1
-a2portrait = 2
-a3portrait = 3
-a4portrait = 4
-a5portrait = 5
-a0landscape = 6
-a1landscape = 7
-a2landscape = 8
-a3landscape = 9
-a4landscape = 10
-a5landscape = 11
-usletterportrait = 12
-usletterlandscape = 13
-uslegalportrait = 14
-uslegallandscape = 15
-
-
-def blankDocumentPaper(papersize, pages):
-    """Create a blank document with pages of the given paper size, and number
-    of pages. """
-    r = Pdf(libc.pycpdf_blankDocumentPaper(papersize, pages))
-    checkerror()
-    return r
 
 
 def ptOfCm(i):
@@ -938,6 +999,34 @@ def setBookmarks(pdf, marks):
     libc.pycpdf_endSetBookmarkInfo(pdf.pdf)
     checkerror()
 
+
+def getBookmarksJSON(pdf):
+    """Get the bookmarks in JSON format."""
+    length = c_int32()
+    data = libc.pycpdf_getBookmarksJSON(pdf.pdf, byref(length))
+    out_data = create_string_buffer(length.value)
+    memmove(out_data, data, length.value)
+    libc.pycpdf_getBookmarksJSONFree()
+    checkerror()
+    return out_data.raw
+
+
+def setBookmarksJSON(pdf, data):
+    """setBookmarksJSON(pdf, data) sets the bookmarks from JSON bookmark data."""
+    libc.pycpdf_setBookmarksJSON(pdf.pdf, data, len(data))
+    checkerror()
+    return
+
+
+def tableOfContents(pdf, font, fontsize, title, bookmark):
+    """tableOfContents(pdf, font, fontsize, title, bookmark) typesets a table
+    of contents from existing bookmarks and prepends it to the document. If
+    bookmark is set, the table of contents gets its own bookmark."""
+    pdf = libc.pycpdf_tableOfContents(
+        pdf.pdf, font, fontsize, str.encode(title), bookmark)
+    checkerror()
+    return pdf
+
 # CHAPTER 7. Presentations
 
 # Not included in the library version
@@ -1149,6 +1238,18 @@ def twoUpStack(pdf):
     checkerror()
 
 
+def impose(pdf, x, y, fit, columns, rtl, btt, center, margin, spacing, linewidth):
+    """impose(pdf, x, y, fit, columns, rtl, btt, center, margin, spacing,
+    linewidth) imposes a PDF. There are two modes: imposing x * y, or imposing
+    to fit a page of size x * y. This is controlled by fit. Columns imposes by
+    columns rather than rows. rtl is right-to-left, btt bottom-to-top. Center
+    is unused for now. Margin is the margin around the output, spacing the
+    spacing between imposed inputs."""
+    libc.pycpdf_impose(pdf.pdf, x, y, fit, columns, rtl,
+                       btt, center, margin, spacing, linewidth)
+    checkerror()
+
+
 def padBefore(pdf, r):
     """Adds a blank page before each page in the given range."""
     r = range_of_list(r)
@@ -1186,7 +1287,17 @@ def padMultipleBefore(pdf, n):
 
 # CHAPTER 10. Annotations
 
-# Not in the library version.
+
+def annotationsJSON(pdf):
+    """Get the annotations in JSON format."""
+    length = c_int32()
+    data = libc.pycpdf_annotationsJSON(pdf.pdf, byref(length))
+    out_data = create_string_buffer(length.value)
+    memmove(out_data, data, length.value)
+    libc.pycpdf_annotationsJSONFree()
+    checkerror()
+    return out_data.raw
+
 
 # CHAPTER 11. Document Information and Metadata
 
@@ -1298,7 +1409,7 @@ def getKeywordsXMP(pdf):
 
 
 def getCreatorXMP(pdf):
-    """Returs the XMP creator of a document."""
+    """Return the XMP creator of a document."""
     r = string_at(libc.pycpdf_getCreatorXMP(pdf.pdf)).decode()
     checkerror()
     return r
@@ -1464,7 +1575,7 @@ def getDateComponents(string):
 def dateStringOfComponents(cs):
     """Build a PDF date string a (year, month, day, hour, minute, second,
     hour_offset, minute_offset) tuple.
-    
+
     Dates: Month 1-31, day 1-31, hours (0-23), minutes (0-59), seconds
     (0-59), hour_offset is the offset from UT in hours (-23 to 23);
     minute_offset is the offset from UT in minutes (-59 to 59)."""
@@ -1729,7 +1840,7 @@ def setMetadataFromFile(pdf, filename):
 
 def setMetadataFromByteArray(pdf, data):
     """Set the XMP metadata from an array of bytes."""
-    libc.pycpdf_setMetadataFromByteArray(pdf.pdf, str.encode(data), len(data))
+    libc.pycpdf_setMetadataFromByteArray(pdf.pdf, data, len(data))
     checkerror()
     return
 
@@ -1952,13 +2063,42 @@ def copyFont(pdf, pdf2, r, pagenumber, fontname):
 # CHAPTER 15. PDF and JSON
 
 
-def outputJSON(filename, parse_content, no_stream_data, pdf):
+def outputJSON(filename, parse_content, no_stream_data, decompress_streams, pdf):
     """Output a PDF in JSON format to the given filename. If parse_content is
-    True, page content is parsed. If no_stream_data is True, all stream data is
-    suppressed entirely."""
+    True, page content is parsed. If decompress_streams is True, streams are
+    decompressed. If no_stream_data is True, all stream data is suppressed
+    entirely."""
     libc.pycpdf_outputJSON(str.encode(filename),
-                           parse_content, no_stream_data, pdf.pdf)
+                           parse_content, no_stream_data, decompress_streams, pdf.pdf)
     checkerror()
+
+
+def outputJSONMemory(pdf, parse_content, no_stream_data, decompress_streams):
+    """outputJSONMemory(pdf, parse_content, no_stream_data, decompress_stream)
+    is like outputJSON, but it write to a buffer in memory)."""
+    length = c_int32()
+    data = libc.pycpdf_outputJSONMemory(
+        pdf.pdf, parse_content, no_stream_data, decompress_streams, byref(length))
+    out_data = create_string_buffer(length.value)
+    memmove(out_data, data, length.value)
+    libc.pycpdf_outputJSONMemoryFree()
+    checkerror()
+    return out_data.raw
+
+
+def fromJSON(filename):
+    """Load a PDF from a JSON file given its filename."""
+    pdf = Pdf(libc.pycpdf_fromJSON(str.encode(filename)))
+    checkerror()
+    return pdf
+
+
+def fromJSONMemory(data):
+    """ Load a PDF from JSON data in memory."""
+    pdf = Pdf(libc.pycpdf_fromJSONMemory(data, len(data)))
+    checkerror()
+    return pdf
+
 
 # CHAPTER 16. Optional Content Groups
 
@@ -1995,8 +2135,65 @@ def OCGCoalesce(pdf):
     libc.pycpdf_OCGCoalesce(pdf.pdf)
     checkerror()
 
+# CHAPTER 17. Making New PDFs
 
-# CHAPTER 17. Miscellaneous
+
+def blankDocument(w, h, pages):
+    """ Create a blank document
+    with pages of the given width (in points), height (in points), and number
+    of pages."""
+    pdf = Pdf(libc.pycpdf_blankDocument(w, h, pages))
+    checkerror()
+    return pdf
+
+
+"""Paper sizes."""
+a0portrait = 0
+a1portrait = 1
+a2portrait = 2
+a3portrait = 3
+a4portrait = 4
+a5portrait = 5
+a0landscape = 6
+a1landscape = 7
+a2landscape = 8
+a3landscape = 9
+a4landscape = 10
+a5landscape = 11
+usletterportrait = 12
+usletterlandscape = 13
+uslegalportrait = 14
+uslegallandscape = 15
+
+
+def blankDocumentPaper(papersize, pages):
+    """Create a blank document with pages of the given paper size, and number
+    of pages. """
+    r = Pdf(libc.pycpdf_blankDocumentPaper(papersize, pages))
+    checkerror()
+    return r
+
+
+def textToPDF(w, h, font, fontsize, filename):
+    """textToPDF(w, h, font, fontsize, filename) typesets a UTF8 text file
+    ragged right on a page of size w * h in points in the given font and font
+    size."""
+    pdf = Pdf(libc.pycpdf_textToPDF(
+        w, h, font, fontsize, str.encode(filename)))
+    checkerror()
+    return pdf
+
+
+def textToPDFPaper(papersize, font, fontsize, filename):
+    """textToPDF(papersize font, fontsize, filename) typesets a UTF8 text file
+    ragged right on a page of the given size in the given font and font
+    size."""
+    pdf = Pdf(libc.pycpdf_textToPDFPaper(
+        papersize, font, fontsize, str.encode(filename)))
+    checkerror()
+    return pdf
+
+# CHAPTER 18. Miscellaneous
 
 
 def draft(pdf, r, boxes):
@@ -2081,6 +2278,42 @@ def removeDictEntry(pdf, key):
     checkerror()
 
 
+def removeDictEntrySearch(pdf, key, searchterm):
+    """Remove any dictionary entry with the given
+    key anywhere in the document, if its value matches the given search term."""
+    libc.pycpdf_removeDictEntrySearch(
+        pdf.pdf, str.encode(key), str.encode(searchterm))
+    checkerror()
+
+
+def replaceDictEntry(pdf, key, newvalue):
+    """Replace any dictionary entry with the given
+    key anywhere in the document using the new value given."""
+    libc.pycpdf_replaceDictEntry(
+        pdf.pdf, str.encode(key), str.encode(newvalue))
+    checkerror()
+
+
+def replaceDictEntrySearch(pdf, key, newvalue, searchterm):
+    """Replace any dictionary entry with the given key anywhere in the
+    document, if its value matches the given search term, with the new value
+    given."""
+    libc.pycpdf_replaceDictEntrySearch(
+        pdf.pdf, str.encode(key), str.encode(newvalue), str.encode(searchterm))
+    checkerror()
+
+
+def getDictEntries(pdf, key):
+    """Return JSON of any dict entries with the given key."""
+    length = c_int32()
+    data = libc.pycpdf_getDictEntries(pdf.pdf, str.encode(key), byref(length))
+    out_data = create_string_buffer(length.value)
+    memmove(out_data, data, length.value)
+    libc.pycpdf_getDictEntriesFree()
+    checkerror()
+    return out_data.raw
+
+
 def removeClipping(pdf, r):
     """Remove all clipping from pages in the given range"""
     r = range_of_list(r)
@@ -2089,12 +2322,6 @@ def removeClipping(pdf, r):
     checkerror()
 
 # CHAPTER X. Undocumented or Internal
-
-
-def setDemo(v):
-    """Internal."""
-    libc.pycpdf_setDemo(v)
-    checkerror()
 
 
 def list_of_range(r):

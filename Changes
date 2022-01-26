@@ -1,7 +1,5 @@
-Sep 2021
+Jan 2021: Added v2.5 (except MacOS ARM : to come Feb 2022)
 
-o Added Python API
+Sep 2021: Added Python API
 
-Version 2.4 (June 2021)
-
-o First release of renewed libcpdf. For earlier work, see the cpdf changelog
+June 2021: First release of renewed libcpdf/libpycpdf. For earlier work, see the cpdf changelog

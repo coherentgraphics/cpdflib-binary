@@ -32,6 +32,11 @@ void cpdf_setSlow();
 extern int cpdf_lastError;
 extern char *cpdf_lastErrorString;
 
+/* In some contexts, for example, .NET or JNI, constants in DLLs can be
+ * difficult or impossible to access. we provide functions in addition. */
+int cpdf_fLastError(void);
+char *cpdf_fLastErrorString(void);
+
 /* cpdf_clearError clears the current error state. */
 void cpdf_clearError(void);
 
@@ -72,26 +77,6 @@ int cpdf_fromMemory(void *, int, const char[]);
  * cpdf_fromFileLazy.
  */
 int cpdf_fromMemoryLazy(void *, int, const char[]);
-
-/* Standard page sizes. */
-enum cpdf_papersize {
-  cpdf_a0portrait,        /* A0 portrait */
-  cpdf_a1portrait,        /* A1 portrait */
-  cpdf_a2portrait,        /* A2 portrait */
-  cpdf_a3portrait,        /* A3 portrait */
-  cpdf_a4portrait,        /* A4 portrait */
-  cpdf_a5portrait,        /* A5 portrait */
-  cpdf_a0landscape,       /* A0 landscape */
-  cpdf_a1landscape,       /* A1 landscape */
-  cpdf_a2landscape,       /* A2 landscape */
-  cpdf_a3landscape,       /* A3 landscape */
-  cpdf_a4landscape,       /* A4 landscape */
-  cpdf_a5landscape,       /* A5 landscape */
-  cpdf_usletterportrait,  /* US Letter portrait */
-  cpdf_usletterlandscape, /* US Letter landscape */
-  cpdf_uslegalportrait,   /* US Legal portrait */
-  cpdf_uslegallandscape   /* US Legal landscape */
-};
 
 /* Remove a PDF from memory, given its number. */
 void cpdf_deletePdf(int);
@@ -403,9 +388,29 @@ void cpdf_scalePages(int, int, double, double);
 /*
  * cpdf_scaleToFit(pdf, range, width, height, scale) scales the content to fit
  * new page dimensions (width x height) multiplied by scale (typically 1.0).
- * Other boxed (crop etc. are altered as appropriate)
+ * Other boxes (crop etc. are altered as appropriate)
  */
 void cpdf_scaleToFit(int, int, double, double, double);
+
+/* Standard page sizes. */
+enum cpdf_papersize {
+  cpdf_a0portrait,        /* A0 portrait */
+  cpdf_a1portrait,        /* A1 portrait */
+  cpdf_a2portrait,        /* A2 portrait */
+  cpdf_a3portrait,        /* A3 portrait */
+  cpdf_a4portrait,        /* A4 portrait */
+  cpdf_a5portrait,        /* A5 portrait */
+  cpdf_a0landscape,       /* A0 landscape */
+  cpdf_a1landscape,       /* A1 landscape */
+  cpdf_a2landscape,       /* A2 landscape */
+  cpdf_a3landscape,       /* A3 landscape */
+  cpdf_a4landscape,       /* A4 landscape */
+  cpdf_a5landscape,       /* A5 landscape */
+  cpdf_usletterportrait,  /* US Letter portrait */
+  cpdf_usletterlandscape, /* US Letter landscape */
+  cpdf_uslegalportrait,   /* US Legal portrait */
+  cpdf_uslegallandscape   /* US Legal landscape */
+};
 
 /*
  * cpdf_scaleToFitPaper(pdf, range, papersize, scale) scales the page content
@@ -522,13 +527,13 @@ void cpdf_crop(int, int, double, double, double, double);
 /* cpdf_removeCrop(pdf, range) removes any crop box from pages in the range. */
 void cpdf_removeCrop(int, int);
 
-/* cpdf_removeTrim(pdf, range) removes any crop box from pages in the range. */
+/* cpdf_removeTrim(pdf, range) removes any trim box from pages in the range. */
 void cpdf_removeTrim(int, int);
 
-/* cpdf_removeArt(pdf, range) removes any crop box from pages in the range. */
+/* cpdf_removeArt(pdf, range) removes any art box from pages in the range. */
 void cpdf_removeArt(int, int);
 
-/* cpdf_removeBleed(pdf, range) removes any crop box from pages in the range. */
+/* cpdf_removeBleed(pdf, range) removes any bleed box from pages in the range. */
 void cpdf_removeBleed(int, int);
 
 /*
@@ -540,7 +545,7 @@ void cpdf_trimMarks(int, int);
 /* cpdf_showBoxes(pdf, range) shows the boxes on the given pages, for debug. */
 void cpdf_showBoxes(int, int);
 
-/* cpdf_hardBox make a given box a 'hard box' i.e clips it explicitly. */
+/* cpdf_hardBox makes a given box a 'hard box' i.e clips it explicitly. */
 void cpdf_hardBox(int, int, const char[]);
 
 /* CHAPTER 4. Encryption */
@@ -567,7 +572,7 @@ void cpdf_squeezeInMemory(int);
 /* CHAPTER 6. Bookmarks */
 
 /*
- * cpdf_startGetBookmarkInfo(pdf) start the bookmark retrieval process for a
+ * cpdf_startGetBookmarkInfo(pdf) starts the bookmark retrieval process for a
  * given PDF.
  */
 void cpdf_startGetBookmarkInfo(int);
@@ -683,7 +688,7 @@ void cpdf_stampExtended(int, int, int, int, int, struct cpdf_position, int);
  */
 int cpdf_combinePages(int, int);
 
-/* Adding text. Adds text to a PDF, if the characters exist in the font. */
+/* Adding text. */
 
 /*
  * Special codes
@@ -816,7 +821,7 @@ void cpdf_removeText(int, int);
  */
 int cpdf_textWidth(enum cpdf_font, const char[]);
 
-/* cpdf_addContent(content, before, range, pdf) adds page content before (if
+/* cpdf_addContent(content, before, pdf, range) adds page content before (if
  * true) or after (if false) the existing content to pages in the given range
  * in the given PDF. */
 void cpdf_addContent(const char[], int, int, int);
@@ -967,29 +972,29 @@ void cpdf_setCreationDate(int, const char[]);
 /* cpdf_setModificationDate(pdf) sets the modifcation date of a document. */
 void cpdf_setModificationDate(int, const char[]);
 
-/* cpdf_setTitleXMP(pdf) set the XMP title of a document. */
+/* cpdf_setTitleXMP(pdf) sets the XMP title of a document. */
 void cpdf_setTitleXMP(int, const char[]);
 
-/* cpdf_setAuthorXMP(pdf) set the XMP author of a document. */
+/* cpdf_setAuthorXMP(pdf) sets the XMP author of a document. */
 void cpdf_setAuthorXMP(int, const char[]);
 
-/* cpdf_setSubjectXMP(pdf) set the XMP subject of a document. */
+/* cpdf_setSubjectXMP(pdf) sets the XMP subject of a document. */
 void cpdf_setSubjectXMP(int, const char[]);
 
-/* cpdf_setKeywordsXMP(pdf) set the XMP keywords of a document. */
+/* cpdf_setKeywordsXMP(pdf) sets the XMP keywords of a document. */
 void cpdf_setKeywordsXMP(int, const char[]);
 
-/* cpdf_setCreatorXMP(pdf) set the XMP creator of a document. */
+/* cpdf_setCreatorXMP(pdf) sets the XMP creator of a document. */
 void cpdf_setCreatorXMP(int, const char[]);
 
-/* cpdf_setProducerXMP(pdf) set the XMP producer of a document. */
+/* cpdf_setProducerXMP(pdf) sets the XMP producer of a document. */
 void cpdf_setProducerXMP(int, const char[]);
 
-/* cpdf_setCreationDateXMP(pdf) set the XMP creation date of a document. */
+/* cpdf_setCreationDateXMP(pdf) sets the XMP creation date of a document. */
 void cpdf_setCreationDateXMP(int, const char[]);
 
 /*
- * cpdf_setModificationDateXMP(pdf) set the XMP modification date of a
+ * cpdf_setModificationDateXMP(pdf) sets the XMP modification date of a
  * document.
  */
 void cpdf_setModificationDateXMP(int, const char[]);
@@ -1221,13 +1226,13 @@ void cpdf_attachFileFromMemory(void *, int, const char[], int);
  */
 void cpdf_attachFileToPageFromMemory(void *, int, const char[], int, int);
 
-/* Remove all page- and document-level attachments from a document */
+/* Remove all page- and document-level attachments from a document. */
 void cpdf_removeAttachedFiles(int);
 
 /*
  * List information about attachments. Call cpdf_startGetAttachments(pdf)
  * first, then cpdf_numberGetAttachments to find out how many there are. Then
- * cpdf_getAttachmentName to return each one 0...(n - 1). Finally, call
+ * cpdf_getAttachmentName etc. to return each one 0...(n - 1). Finally, call
  * cpdf_endGetAttachments to clean up.
  */
 void cpdf_startGetAttachments(int);
@@ -1306,13 +1311,13 @@ void cpdf_copyFont(int, int, int, int, const char[]);
 void cpdf_outputJSON(const char[], int, int, int, int);
 
 /* cpdf_outputJSONMemory(parse_content, no_stream_data, pdf, &length) is like
- * outputJSON, but it write to a buffer in memory. The length is filled in. */
+ * outputJSON, but it writes to a buffer in memory. The length is filled in. */
 void *cpdf_outputJSONMemory(int, int, int, int, int *);
 
-/* Load a PDF from a JSON file given its filename */
+/* Load a PDF from a JSON file given its filename. */
 int cpdf_fromJSON(const char[]);
 
-/* Load a PDF from a JSON file in memory, given the buffer and its length */
+/* Load a PDF from a JSON file in memory, given the buffer and its length. */
 int cpdf_fromJSONMemory(void *, int);
 
 /* CHAPTER 16. Optional Content Groups */
@@ -1366,7 +1371,7 @@ int cpdf_textToPDFPaper(int, int, double, const char[]);
 
 /*
  * cpdf_draft(pdf, range, boxes) removes images on the given pages, replacing
- * them with crossed boxes if 'boxes' is true
+ * them with crossed boxes if 'boxes' is true.
  */
 void cpdf_draft(int, int, int);
 
@@ -1415,7 +1420,7 @@ void cpdf_removeDictEntry(int, const char[]);
 void cpdf_removeDictEntrySearch(int, const char[], const char[]);
 
 /* cpdf_replaceDictEntry(pdf, key, newvalue) replaces the value associated with
- * the given key */
+ * the given key. */
 void cpdf_replaceDictEntry(int, const char[], const char[]);
 
 /* cpdf_replaceDictEntry(pdf, key, newvalue, searchterm) replaces the value

@@ -1,0 +1,1967 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>dotnet-libcpdf</name>
+    </assembly>
+    <members>
+        <member name="T:CoherentGraphics.Cpdf">
+            <summary>The Coherent PDF Library for .NET</summary>
+        </member>
+        <member name="T:CoherentGraphics.Cpdf.Pdf">
+            <summary>PDF document. Use the 'using' keyword, or call Dispose to make sure PDFs are deallocated.</summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.Pdf.Dispose">
+            <summary>Force disposal of the PDF.</summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.Pdf.Finalize">
+            <summary>Class destructor</summary>
+        </member>
+        <member name="T:CoherentGraphics.Cpdf.CPDFError">
+            <summary>Any function in this library may raise the CPDFError exception.</summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.CPDFError.#ctor(System.String)">
+            <summary>Construct a CPDFError which carries a string.</summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.dummych0">
+            <summary>CHAPTER 0. Preliminaries</summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.startup">
+            <summary>
+            Initialises the library. Must be called before any other function.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.version">
+            <summary>
+            Returns a string giving the version number of the CPDF library.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.setFast">
+            <summary>
+            Some operations have a fast mode. The default is 'slow' mode, which works
+            even on old-fashioned files. For more details, see section 1.13 of the
+            CPDF manual. This function sets the mode to fast globally.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.setSlow">
+            <summary>
+            Some operations have a fast mode. The default is 'slow' mode, which works
+            even on old-fashioned files. For more details, see section 1.13 of the
+            CPDF manual. This functions sets the mode to slow globally.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.lastError">
+            <summary>
+            Not to be called directly. Errors in .NET cpdf are raised by exceptions.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.lastErrorString">
+            <summary>
+            Not to be called directly. Errors in .NET cpdf are raised by exceptions.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.clearError">
+            <summary>
+            Not to be called directly. Errors in .NET cpdf are raised by exceptions.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.onExit">
+            <summary>
+            A debug function which prints some information about
+            resource usage. This can be used to detect if PDFs or ranges are being
+            deallocated properly. Contrary to its name, it may be run at any time.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.dummych1">
+            <summary>CHAPTER 1. Basics</summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.fromFile(System.String,System.String)">
+            <summary>
+            Loads a PDF file from a given file. Supply
+            a user password (possibly blank) in case the file is encrypted. It won't be
+            decrypted, but sometimes the password is needed just to load the file.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.fromFileLazy(System.String,System.String)">
+            <summary>
+            Loads a PDF from a file, doing only minimal
+            parsing. The objects will be read and parsed when they are actually
+            needed. Use this when the whole file won't be required. Also supply a user
+            password (possibly blank) in case the file is encrypted. It won't be
+            decrypted, but sometimes the password is needed just to load the file.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.fromMemory(System.Byte[],System.String)">
+            <summary>
+            Loads a file from memory given any user password.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.fromMemoryLazy(System.IntPtr,System.Int32,System.String)">
+            <summary>
+            Loads a file from memory, given a
+            pointer and a length, and the user password, but lazily like
+            fromFileLazy. The caller must use AllocHGlobal / Marshal.Copy / FreeHGlobal
+            itself. It must not free the memory until the PDF is also gone.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.startEnumeratePDFs">
+            <summary>
+            To enumerate the list of currently allocated PDFs, call
+            startEnumeratePDFs which gives the number, n, of PDFs allocated, then
+            enumeratePDFsInfo and enumeratePDFsKey with index numbers from
+            0...(n - 1). Call endEnumeratePDFs to clean up.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.enumeratePDFsKey(System.Int32)">
+            <summary>
+            To enumerate the list of currently allocated PDFs, call
+            startEnumeratePDFs which gives the number, n, of PDFs allocated, then
+            enumeratePDFsInfo and enumeratePDFsKey with index numbers from
+            0...(n - 1). Call endEnumeratePDFs to clean up.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.enumeratePDFsInfo(System.Int32)">
+            <summary>
+            To enumerate the list of currently allocated PDFs, call
+            startEnumeratePDFs which gives the number, n, of PDFs allocated, then
+            enumeratePDFsInfo and enumeratePDFsKey with index numbers from
+            0...(n - 1). Call endEnumeratePDFs to clean up.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.endEnumeratePDFs">
+            <summary>
+            To enumerate the list of currently allocated PDFs, call
+            startEnumeratePDFs which gives the number, n, of PDFs allocated, then
+            enumeratePDFsInfo and enumeratePDFsKey with index numbers from
+            0...(n - 1). Call endEnumeratePDFs to clean up.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.ptOfCm(System.Double)">
+            <summary>
+            Converts a figure in centimetres to points (72 points to 1 inch)
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.ptOfMm(System.Double)">
+            <summary>
+            Converts a figure in millimetres to points (72 points to 1 inch)
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.ptOfIn(System.Double)">
+            <summary>
+            Converts a figure in inches to points (72 points to 1 inch)
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.cmOfPt(System.Double)">
+            <summary>
+            Converts a figure in points to centimetres (72 points to 1 inch)
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.mmOfPt(System.Double)">
+            <summary>
+            Converts a figure in points to millimetres (72 points to 1 inch)
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.inOfPt(System.Double)">
+            <summary>
+            Converts a figure in points to inches (72 points to 1 inch)
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.parsePagespec(CoherentGraphics.Cpdf.Pdf,System.String)">
+            <summary>
+            Parses a page specification with reference
+            to a given PDF (the PDF is supplied so that page ranges which reference
+            pages which do not exist are rejected).
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.validatePagespec(System.String)">
+            <summary>
+            Validates a page specification so far as is
+            possible in the absence of the actual document. Result is true if valid.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.stringOfPagespec(CoherentGraphics.Cpdf.Pdf,System.Collections.Generic.List{System.Int32})">
+            <summary>
+            Builds a page specification from a page
+            range. For example, the range containing 1,2,3,6,7,8 in a document of 8
+            pages might yield "1-3,6-end"
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.blankRange">
+            <summary>
+            Creates a range with no pages in.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.range(System.Int32,System.Int32)">
+            <summary>
+            Builds a range from one page to another inclusive. For
+            example, range(3,7) gives the range 3,4,5,6,7
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.all(CoherentGraphics.Cpdf.Pdf)">
+            <summary>
+            The range containing all the pages in a given document.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.even(System.Collections.Generic.List{System.Int32})">
+            <summary>
+            Makes a range which contains just the even pages of
+            another range.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.odd(System.Collections.Generic.List{System.Int32})">
+            <summary>
+            Makes a range which contains just the odd pages of another
+            range.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.rangeUnion(System.Collections.Generic.List{System.Int32},System.Collections.Generic.List{System.Int32})">
+            <summary>
+            Makes the union of two ranges giving a range
+            containing the pages in range a and range b.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.difference(System.Collections.Generic.List{System.Int32},System.Collections.Generic.List{System.Int32})">
+            <summary>
+            Makes the difference of two ranges, giving a range
+            containing all the pages in a except for those which are also in b.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.removeDuplicates(System.Collections.Generic.List{System.Int32})">
+            <summary>
+            Deduplicates a range, making a new one.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.rangeLength(System.Collections.Generic.List{System.Int32})">
+            <summary>
+            Gives the number of pages in a range.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.rangeGet(System.Collections.Generic.List{System.Int32},System.Int32)">
+            <summary>
+            Gets the page number at position n in a range,
+            where n runs from 0 to rangeLength - 1.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.rangeAdd(System.Collections.Generic.List{System.Int32},System.Int32)">
+            <summary>
+            Adds the page to a range, if it is not already
+            there.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.isInRange(System.Collections.Generic.List{System.Int32},System.Int32)">
+            <summary>
+            Returns true if the page is in the range,
+            false otherwise.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.pages(CoherentGraphics.Cpdf.Pdf)">
+            <summary>
+            Returns the number of pages in a PDF.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.pagesFast(System.String,System.String)">
+            <summary>
+            Returns the number of pages in a given
+            PDF, with given user password. It tries to do this as fast as
+            possible, without loading the whole file.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.toFile(CoherentGraphics.Cpdf.Pdf,System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Writes the file to a given
+            filename. If linearize is true, it will be linearized if a linearizer is
+            available. If make_id is true, it will be given a new ID.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.toFileExt(CoherentGraphics.Cpdf.Pdf,System.String,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            Writes the file to a given filename. If
+            make_id is true, it will be given a new ID.  If preserve_objstm is true,
+            existing object streams will be preserved. If generate_objstm is true,
+            object streams will be generated even if not originally present. If
+            compress_objstm is true, object streams will be compressed (what we
+            usually want). WARNING: the pdf argument will be invalid after this call,
+            and should be not be used again.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.toMemory(CoherentGraphics.Cpdf.Pdf,System.Boolean,System.Boolean)">
+            <summary>
+            Writes a PDF file 
+            and returns as an array of bytes.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.isEncrypted(CoherentGraphics.Cpdf.Pdf)">
+            <summary>
+            Returns true if a documented is encrypted, false
+            otherwise.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.decryptPdf(CoherentGraphics.Cpdf.Pdf,System.String)">
+            <summary>
+            Attempts to decrypt a PDF using the given
+            user password. An exception is raised if the decryption fails.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.decryptPdfOwner(CoherentGraphics.Cpdf.Pdf,System.String)">
+            <summary>
+            Attempts to decrypt a PDF using the
+            given owner password. Raises an exception if the decryption fails.
+            </summary>
+        </member>
+        <member name="T:CoherentGraphics.Cpdf.Permission">
+            <summary>Permissions</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.Permission.NoEdit">
+            <summary>Cannot edit the document</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.Permission.NoPrint">
+            <summary>Cannot print the document</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.Permission.NoCopy">
+            <summary>Cannot copy the document</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.Permission.NoAnnot">
+            <summary>Cannot annotate the document</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.Permission.NoForms">
+            <summary>Cannot edit forms in the document</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.Permission.NoExtract">
+            <summary>Cannot extract information</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.Permission.NoAssemble">
+            <summary>Cannot assemble into a bigger document</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.Permission.NoHqPrint">
+            <summary>Cannot print high quality</summary>
+        </member>
+        <member name="T:CoherentGraphics.Cpdf.EncryptionMethod">
+            <summary>Encryption methods</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.EncryptionMethod.Pdf40bit">
+            <summary>40 bit RC4 encryption</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.EncryptionMethod.Pdf128bit">
+            <summary>128 bit RC4 encryption</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.EncryptionMethod.Aes128bitfalse">
+            <summary>128 bit AES encryption, do not encrypt metadata</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.EncryptionMethod.Aes128bittrue">
+            <summary>128 bit AES encryption, encrypt metadata</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.EncryptionMethod.Aes256bitfalse">
+            <summary>Deprecated. Do not use for new files</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.EncryptionMethod.Aes256bittrue">
+            <summary>Deprecated. Do not use for new files</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.EncryptionMethod.Aes256bitisofalse">
+            <summary>256 bit AES encryption, do not encrypt metadata</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.EncryptionMethod.Aes256bitiosotrue">
+            <summary>256 bit AES encryption, encrypt metadata</summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.toFileEncrypted(CoherentGraphics.Cpdf.Pdf,CoherentGraphics.Cpdf.EncryptionMethod,System.Collections.Generic.List{CoherentGraphics.Cpdf.Permission},System.String,System.String,System.Boolean,System.Boolean,System.String)">
+            <summary>
+            Writes a file as encrypted.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.toFileEncryptedExt(CoherentGraphics.Cpdf.Pdf,CoherentGraphics.Cpdf.EncryptionMethod,System.Collections.Generic.List{CoherentGraphics.Cpdf.Permission},System.String,System.String,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.String)">
+            <summary>
+            Writes a file as encrypted with extra parameters. WARNING: the
+            pdf argument will be invalid after this call, and should not be used again.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.hasPermission(CoherentGraphics.Cpdf.Pdf,CoherentGraphics.Cpdf.Permission)">
+            <summary>
+            Returns true if the given permission
+            (restriction) is present.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.encryptionKind(CoherentGraphics.Cpdf.Pdf)">
+            <summary>
+            Returns the encryption method currently in use on
+            a document.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.dummych2">
+            <summary>CHAPTER 2. Merging and Splitting</summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.mergeSimple(System.Collections.Generic.List{CoherentGraphics.Cpdf.Pdf})">
+            <summary>
+            Given a list of PDFs,
+            merges the files into a new one, which is returned.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.merge(System.Collections.Generic.List{CoherentGraphics.Cpdf.Pdf},System.Boolean,System.Boolean)">
+            <summary>
+            Merges the
+            PDFs. If retain_numbering is true page labels are not rewritten. If
+            remove_duplicate_fonts is true, duplicate fonts are merged. This is useful
+            when the source documents for merging originate from the same source.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.mergeSame(System.Collections.Generic.List{CoherentGraphics.Cpdf.Pdf},System.Boolean,System.Boolean,System.Collections.Generic.List{System.Collections.Generic.List{System.Int32}})">
+            <summary>
+            The same as merge, except that it has an additional
+            argument - a list of page ranges. This is used to select the pages to
+            pick from each PDF. This avoids duplication of information when multiple
+            discrete parts of a source PDF are included.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.selectPages(CoherentGraphics.Cpdf.Pdf,System.Collections.Generic.List{System.Int32})">
+            <summary>
+            Returns a new document which just those pages
+            in the page range.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.dummych3">
+            <summary>CHAPTER 3. Pages</summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.scalePages(CoherentGraphics.Cpdf.Pdf,System.Collections.Generic.List{System.Int32},System.Double,System.Double)">
+            <summary>
+            Scales the page dimensions
+            and content by the given scale, about (0, 0). Other boxes (crop etc. are
+            altered as appropriate)
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.scaleToFit(CoherentGraphics.Cpdf.Pdf,System.Collections.Generic.List{System.Int32},System.Double,System.Double,System.Double)">
+            <summary>
+            Scales the content to fit
+            new page dimensions (width x height) multiplied by scale (typically 1.0).
+            Other boxes (crop etc. are altered as appropriate)
+            </summary>
+        </member>
+        <member name="T:CoherentGraphics.Cpdf.Papersize">
+            <summary>Built-in paper sizes</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.Papersize.A0portrait">
+            <summary>A0 Portrait paper</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.Papersize.A1portrait">
+            <summary>A1 Portrait paper</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.Papersize.A2portrait">
+            <summary>A2 Portrait paper</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.Papersize.A3portrait">
+            <summary>A3 Portrait paper</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.Papersize.A4portrait">
+            <summary>A4 Portrait paper</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.Papersize.A5portrait">
+            <summary>A5 Portrait paper</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.Papersize.A0landscape">
+            <summary>A0 Landscape paper</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.Papersize.A1landscape">
+            <summary>A1 Landscape paper</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.Papersize.A2landscape">
+            <summary>A2 Landscape paper</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.Papersize.A3landscape">
+            <summary>A3 Landscape paper</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.Papersize.A4landscape">
+            <summary>A4 Landscape paper</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.Papersize.A5landscape">
+            <summary>A5 Landscape paper</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.Papersize.Usletterportrait">
+            <summary>US Letter Portrait paper</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.Papersize.Usletterlandscape">
+            <summary>US Letter Landscape paper</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.Papersize.Uslegalportrait">
+            <summary>US Legal Portrait paper</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.Papersize.Uslegallandscape">
+            <summary>US Legal Landscape paper</summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.scaleToFitPaper(CoherentGraphics.Cpdf.Pdf,System.Collections.Generic.List{System.Int32},CoherentGraphics.Cpdf.Papersize,System.Double)">
+            <summary>
+            Scales the page content
+            to fit the given page size, possibly multiplied by scale (typically 1.0)
+            </summary>
+        </member>
+        <member name="T:CoherentGraphics.Cpdf.Anchor">
+            <summary>Position anchors</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.Anchor.PosCentre">
+            <summary>Absolute centre</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.Anchor.PosLeft">
+            <summary>Absolute left</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.Anchor.PosRight">
+            <summary>Absolute right</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.Anchor.Top">
+            <summary>The top centre of the page</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.Anchor.TopLeft">
+            <summary>The top left of the page</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.Anchor.TopRight">
+            <summary>The top right of the page</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.Anchor.Left">
+            <summary>The left hand side of the page, halfway down</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.Anchor.BottomLeft">
+            <summary>The bottom left of the page</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.Anchor.Bottom">
+            <summary>The bottom middle of the page</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.Anchor.BottomRight">
+            <summary>The bottom right of the page</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.Anchor.Right">
+            <summary>The right hand side of the page, halfway down</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.Anchor.Diagonal">
+            <summary>Diagonal, bottom left to top right</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.Anchor.ReverseDiagonal">
+            <summary>Diagonal, top left to bottom right</summary>
+        </member>
+        <member name="T:CoherentGraphics.Cpdf.Position">
+            <summary>Positions on the page. Used for scaling about a point, and adding text.
+            A position is an anchor and zero or one or two parameters. Constructors are provided.
+            <para>&#160;</para>
+            PosCentre: Two parameters, x and y
+            <para>&#160;</para>
+            PosLeft: Two parameters, x and y
+            <para>&#160;</para>
+            PosRight: Two parameters, x and y
+            <para>&#160;</para>
+            Top: One parameter - distance from top
+            <para>&#160;</para>
+            TopLeft: One parameter - distance from top left
+            <para>&#160;</para>
+            TopRight: One parameter - distance from top right
+            <para>&#160;</para>
+            Left: One parameter - distance from left middle
+            <para>&#160;</para>
+            BottomLeft: One parameter - distance from bottom left
+            <para>&#160;</para>
+            Bottom: One parameter - distance from bottom
+            <para>&#160;</para>
+            BottomRight: One parameter - distance from bottom right
+            <para>&#160;</para>
+            Right: One parameter - distance from right
+            <para>&#160;</para>
+            Diagonal: Zero parameters
+            <para>&#160;</para>
+            ReverseDiagonal: Zero parameters</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.Position.anchor">
+            <summary>Position anchor</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.Position.coord1">
+            <summary>Parameter one</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.Position.coord2">
+            <summary>Parameter two</summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.Position.#ctor(CoherentGraphics.Cpdf.Anchor)">
+            <summary>Build a position with zero parameters</summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.Position.#ctor(CoherentGraphics.Cpdf.Anchor,System.Double)">
+            <summary>Build a position with one parameter</summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.Position.#ctor(CoherentGraphics.Cpdf.Anchor,System.Double,System.Double)">
+            <summary>Build a position with two parameters</summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.scaleContents(CoherentGraphics.Cpdf.Pdf,System.Collections.Generic.List{System.Int32},CoherentGraphics.Cpdf.Position,System.Double)">
+            <summary>
+            Scales the contents of the
+            pages in the range about the point given by the position, by the
+            scale given.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.shiftContents(CoherentGraphics.Cpdf.Pdf,System.Collections.Generic.List{System.Int32},System.Double,System.Double)">
+            <summary>
+            Shifts the content of the pages in
+            the range.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.rotate(CoherentGraphics.Cpdf.Pdf,System.Collections.Generic.List{System.Int32},System.Int32)">
+            <summary>
+            Changes the viewing rotation to an
+            absolute value. Appropriate rotations are 0, 90, 180, 270.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.rotateBy(CoherentGraphics.Cpdf.Pdf,System.Collections.Generic.List{System.Int32},System.Int32)">
+            <summary>
+            Rotates the content about the
+            centre of the page by the given number of degrees, in a clockwise
+            direction.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.rotateContents(CoherentGraphics.Cpdf.Pdf,System.Collections.Generic.List{System.Int32},System.Double)">
+            <summary>
+            Rotates the content about the
+            centre of the page by the given number of degrees, in a clockwise
+            direction.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.upright(CoherentGraphics.Cpdf.Pdf,System.Collections.Generic.List{System.Int32})">
+            <summary>
+            Changes the viewing rotation of the pages in the
+            range, counter-rotating the dimensions and content such that there is no
+            visual change.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.hFlip(CoherentGraphics.Cpdf.Pdf,System.Collections.Generic.List{System.Int32})">
+            <summary>
+            Flips horizontally the pages in the range.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.vFlip(CoherentGraphics.Cpdf.Pdf,System.Collections.Generic.List{System.Int32})">
+            <summary>
+            Flips vertically the pages in the range.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.crop(CoherentGraphics.Cpdf.Pdf,System.Collections.Generic.List{System.Int32},System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Crops a page, replacing any existing
+            crop box. The dimensions are in points.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.removeCrop(CoherentGraphics.Cpdf.Pdf,System.Collections.Generic.List{System.Int32})">
+            <summary>
+            Removes any crop box from pages in the range.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.removeTrim(CoherentGraphics.Cpdf.Pdf,System.Collections.Generic.List{System.Int32})">
+            <summary>
+            Removes any trim box from pages in the range.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.removeArt(CoherentGraphics.Cpdf.Pdf,System.Collections.Generic.List{System.Int32})">
+            <summary>
+            Removes any art box from pages in the range.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.removeBleed(CoherentGraphics.Cpdf.Pdf,System.Collections.Generic.List{System.Int32})">
+            <summary>
+            Removes any bleed box from pages in the range.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.trimMarks(CoherentGraphics.Cpdf.Pdf,System.Collections.Generic.List{System.Int32})">
+            <summary>
+            Adds trim marks to the given pages, if the
+            trimbox exists.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.showBoxes(CoherentGraphics.Cpdf.Pdf,System.Collections.Generic.List{System.Int32})">
+            <summary>
+            Shows the boxes on the given pages, for debug.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.hardBox(CoherentGraphics.Cpdf.Pdf,System.Collections.Generic.List{System.Int32},System.String)">
+            <summary>
+            Makes a given box a 'hard box' i.e clips it explicitly.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.dummych4">
+            <summary>CHAPTER 4. Encryption</summary>
+            <summary>Encryption covered under Chapter 1 in cpdflib.</summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.dummych5">
+            <summary>CHAPTER 5. Compression</summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.compress(CoherentGraphics.Cpdf.Pdf)">
+            <summary>
+            Compresses any uncompressed streams in the given PDF
+            using the Flate algorithm.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.decompress(CoherentGraphics.Cpdf.Pdf)">
+            <summary>
+            Decompresses any streams in the given PDF, so long as
+            the compression method is supported.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.squeezeInMemory(CoherentGraphics.Cpdf.Pdf)">
+            <summary>
+            Squeezes a pdf in memory.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.dummych6">
+            <summary>CHAPTER 6. Bookmarks</summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.startGetBookmarkInfo(CoherentGraphics.Cpdf.Pdf)">
+            <summary>
+            Starts the bookmark retrieval process for a
+            given PDF.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.numberBookmarks">
+            <summary>
+            Gets the number of bookmarks for the PDF given to
+            startGetBookmarkInfo.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.getBookmarkLevel(System.Int32)">
+            <summary>
+            Gets the bookmark level for the given bookmark
+            (0...(n - 1)).
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.getBookmarkPage(CoherentGraphics.Cpdf.Pdf,System.Int32)">
+            <summary>
+            Gets the bookmark target page for the given PDF
+            (which must be the same as the PDF passed to startSetBookmarkInfo)
+            and bookmark (0...(n - 1)).
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.getBookmarkText(System.Int32)">
+            <summary>
+            Returns the text of bookmark (0...(n - 1)).
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.getBookmarkOpenStatus(System.Int32)">
+            <summary>
+            True if the bookmark is open.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.endGetBookmarkInfo">
+            <summary>
+            Ends the bookmark retrieval process, cleaning up.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.startSetBookmarkInfo(System.Int32)">
+            <summary>
+            Starts the bookmark setting process for n
+            bookmarks.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.setBookmarkLevel(System.Int32,System.Int32)">
+            <summary>
+            Set bookmark level for the given bookmark
+            (0...(n - 1)).
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.setBookmarkPage(CoherentGraphics.Cpdf.Pdf,System.Int32,System.Int32)">
+            <summary>
+            Sets the bookmark target
+            page for the given PDF (which must be the same as the PDF to be passed to
+            endSetBookmarkInfo) and bookmark (0...(n - 1)).
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.setBookmarkOpenStatus(System.Int32,System.Boolean)">
+            <summary>
+            Sets the open status of bookmark (0...(n - 1)).
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.setBookmarkText(System.Int32,System.String)">
+            <summary>
+            Sets the text of bookmark (0...(n - 1)).
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.endSetBookmarkInfo(CoherentGraphics.Cpdf.Pdf)">
+            <summary>
+            Ends the bookmark setting process, writing the
+            bookmarks to the given PDF.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.getBookmarksJSON(CoherentGraphics.Cpdf.Pdf)">
+            <summary>
+            Returns the bookmark data in JSON format.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.setBookmarksJSON(CoherentGraphics.Cpdf.Pdf,System.Byte[])">
+            <summary>
+            Sets the bookmarks from JSON bookmark data.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.tableOfContents(CoherentGraphics.Cpdf.Pdf,CoherentGraphics.Cpdf.Font,System.Double,System.String,System.Boolean)">
+            <summary>
+            Typesets a table
+            of contents from existing bookmarks and prepends it to the document. If
+            bookmark is set, the table of contents gets its own bookmark.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.dummych7">
+            <summary>CHAPTER 7. Presentations</summary>
+            <summary>Not included in the library version.</summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.dummych8">
+            <summary>CHAPTER 8. Logos, Watermarks and Stamps</summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.stampOn(CoherentGraphics.Cpdf.Pdf,CoherentGraphics.Cpdf.Pdf,System.Collections.Generic.List{System.Int32})">
+            <summary>
+            Stamps stamp_pdf on top of all the
+            pages in the document which are in the range. The stamp is placed with its
+            origin at the origin of the target document.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.stampUnder(CoherentGraphics.Cpdf.Pdf,CoherentGraphics.Cpdf.Pdf,System.Collections.Generic.List{System.Int32})">
+            <summary>
+            Stamps stamp_pdf under all the
+            pages in the document which are in the range. The stamp is placed with its
+            origin at the origin of the target document.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.stampExtended(CoherentGraphics.Cpdf.Pdf,CoherentGraphics.Cpdf.Pdf,System.Collections.Generic.List{System.Int32},System.Boolean,System.Boolean,CoherentGraphics.Cpdf.Position,System.Boolean)">
+            <summary>
+            A stamping function with extra features. - isover
+            true, pdf goes over pdf2, isover false, pdf goes under pdf2 -
+            scale_stamp_to_fit scales the stamp to fit the page - pos gives the
+            position to put the stamp - relative_to_cropbox: if true, pos is relative
+            to cropbox not mediabox.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.combinePages(CoherentGraphics.Cpdf.Pdf,CoherentGraphics.Cpdf.Pdf)">
+            <summary>
+            Combines the PDFs page-by-page, putting
+            each page of 'over' over each page of 'under'.
+            </summary>
+        </member>
+        <member name="T:CoherentGraphics.Cpdf.Font">
+            <summary>Standard fonts</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.Font.TimesRoman">
+            <summary>Times Roman</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.Font.TimesBold">
+            <summary>Times Bold</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.Font.TimesItalic">
+            <summary>Times Italic</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.Font.TimesBoldItalic">
+            <summary>Times Bold Italic</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.Font.Helvetica">
+            <summary>Helvetica</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.Font.HelveticaBold">
+            <summary>Helvetica Bold</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.Font.HelveticaOblique">
+            <summary>Helvetica Oblique</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.Font.HelveticaBoldOblique">
+            <summary>Helvetica Bold Oblique</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.Font.Courier">
+            <summary>Courier</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.Font.CourierBold">
+            <summary>Courier Bold</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.Font.CourierOblique">
+            <summary>Courier Oblique</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.Font.CourierBoldOblique">
+            <summary>Courier Bold Oblique</summary>
+        </member>
+        <member name="T:CoherentGraphics.Cpdf.Justification">
+            <summary>Justifications</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.Justification.LeftJustify">
+            <summary>Left justify</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.Justification.CentreJustify">
+            <summary>Centre justify</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.Justification.RightJustify">
+            <summary>Right justify</summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.addText(System.Boolean,CoherentGraphics.Cpdf.Pdf,System.Collections.Generic.List{System.Int32},System.String,CoherentGraphics.Cpdf.Position,System.Double,System.Int32,CoherentGraphics.Cpdf.Font,System.Double,System.Double,System.Double,System.Double,System.Boolean,System.Boolean,System.Boolean,System.Double,CoherentGraphics.Cpdf.Justification,System.Boolean,System.Boolean,System.String,System.Double,System.Boolean)">
+            <summary>
+            Adds text to the pages in the given range.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.addTextSimple(CoherentGraphics.Cpdf.Pdf,System.Collections.Generic.List{System.Int32},System.String,CoherentGraphics.Cpdf.Position,CoherentGraphics.Cpdf.Font,System.Double)">
+            <summary>
+            Adds text with most parameters default.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.removeText(CoherentGraphics.Cpdf.Pdf,System.Collections.Generic.List{System.Int32})">
+            <summary>
+            Removes any text added by cpdf from the
+            given pages.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.textWidth(CoherentGraphics.Cpdf.Font,System.String)">
+            <summary>
+            Returns the width of a given string in the given font in thousandths of a
+            point.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.addContent(System.String,System.Boolean,CoherentGraphics.Cpdf.Pdf,System.Collections.Generic.List{System.Int32})">
+            <summary>
+            Adds page content before (if
+            true) or after (if false) the existing content to pages in the given range
+            in the given PDF.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.stampAsXObject(CoherentGraphics.Cpdf.Pdf,System.Collections.Generic.List{System.Int32},CoherentGraphics.Cpdf.Pdf)">
+            <summary>
+            Stamps stamp_pdf onto the pages
+            in the given range in pdf as a shared Form XObject. The name of the
+            newly-created XObject is returned.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.dummych9">
+            <summary>CHAPTER 9. Multipage facilities</summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.impose(CoherentGraphics.Cpdf.Pdf,System.Double,System.Double,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Double,System.Double,System.Double)">
+            <summary>
+            Imposes a PDF. There are two modes: imposing x * y, or imposing
+            to fit a page of size x * y. This is controlled by fit. Columns imposes by
+            columns rather than rows. rtl is right-to-left, btt bottom-to-top. Center is
+            unused for now. Margin is the margin around the output, spacing the spacing
+            between imposed inputs.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.twoUp(CoherentGraphics.Cpdf.Pdf)">
+            <summary>
+            Imposes a document two up. twoUpStack does so by doubling the
+            page size, to fit two pages on one.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.twoUpStack(CoherentGraphics.Cpdf.Pdf)">
+            <summary>
+            Impose a document two up. twoUpStack does so by doubling the
+            page size, to fit two pages on one.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.padBefore(CoherentGraphics.Cpdf.Pdf,System.Collections.Generic.List{System.Int32})">
+            <summary>
+            Adds a blank page before each page in the given
+            range.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.padAfter(CoherentGraphics.Cpdf.Pdf,System.Collections.Generic.List{System.Int32})">
+            <summary>
+            Adds a blank page after each page in the given
+            range.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.padEvery(CoherentGraphics.Cpdf.Pdf,System.Int32)">
+            <summary>
+            Adds a blank page after every n pages.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.padMultiple(CoherentGraphics.Cpdf.Pdf,System.Int32)">
+            <summary>
+            Adds pages at the end to pad the file to a
+            multiple of n pages in length.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.padMultipleBefore(CoherentGraphics.Cpdf.Pdf,System.Int32)">
+            <summary>
+            Adds pages at the beginning to pad the file to a
+            multiple of n pages in length.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.dummych10">
+            <summary>CHAPTER 10. Annotations</summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.annotationsJSON(CoherentGraphics.Cpdf.Pdf)">
+            <summary>
+            Returns the annotations from a PDF in JSON format
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.dummych11">
+            <summary>CHAPTER 11. Document Information and Metadata</summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.isLinearized(System.String)">
+            <summary>
+            Finds out if a document is linearized as
+            quickly as possible without loading it.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.getVersion(CoherentGraphics.Cpdf.Pdf)">
+            <summary>
+            Returns the minor version number of a document.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.getMajorVersion(CoherentGraphics.Cpdf.Pdf)">
+            <summary>
+            Returns the minor version number of a document.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.getTitle(CoherentGraphics.Cpdf.Pdf)">
+            <summary>
+            Returns the title of a document.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.getAuthor(CoherentGraphics.Cpdf.Pdf)">
+            <summary>
+            Returns the author of a document.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.getSubject(CoherentGraphics.Cpdf.Pdf)">
+            <summary>
+            Returns the subject of a document.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.getKeywords(CoherentGraphics.Cpdf.Pdf)">
+            <summary>
+            Returns the keywords of a document.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.getCreator(CoherentGraphics.Cpdf.Pdf)">
+            <summary>
+            Returns the creator of a document.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.getProducer(CoherentGraphics.Cpdf.Pdf)">
+            <summary>
+            Returns the producer of a document.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.getCreationDate(CoherentGraphics.Cpdf.Pdf)">
+            <summary>
+            Returns the creation date of a document.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.getModificationDate(CoherentGraphics.Cpdf.Pdf)">
+            <summary>
+            Returns the modification date of a document.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.getTitleXMP(CoherentGraphics.Cpdf.Pdf)">
+            <summary>
+            Returns the XMP title of a document.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.getAuthorXMP(CoherentGraphics.Cpdf.Pdf)">
+            <summary>
+            Returns the XMP author of a document.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.getSubjectXMP(CoherentGraphics.Cpdf.Pdf)">
+            <summary>
+            Returns the XMP subject of a document.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.getKeywordsXMP(CoherentGraphics.Cpdf.Pdf)">
+            <summary>
+            Returns the XMP keywords of a document.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.getCreatorXMP(CoherentGraphics.Cpdf.Pdf)">
+            <summary>
+            Returns the XMP creator of a document.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.getProducerXMP(CoherentGraphics.Cpdf.Pdf)">
+            <summary>
+            Returns the XMP producer of a document.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.getCreationDateXMP(CoherentGraphics.Cpdf.Pdf)">
+            <summary>
+            Returns the XMP creation date of a document.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.getModificationDateXMP(CoherentGraphics.Cpdf.Pdf)">
+            <summary>
+            Returns the XMP modification date of a document.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.setTitle(CoherentGraphics.Cpdf.Pdf,System.String)">
+            <summary>
+            Sets the title of a document.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.setAuthor(CoherentGraphics.Cpdf.Pdf,System.String)">
+            <summary>
+            Sets the author of a document.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.setSubject(CoherentGraphics.Cpdf.Pdf,System.String)">
+            <summary>
+            Sets the subject of a document.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.setKeywords(CoherentGraphics.Cpdf.Pdf,System.String)">
+            <summary>
+            Sets the keywords of a document.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.setCreator(CoherentGraphics.Cpdf.Pdf,System.String)">
+            <summary>
+            Sets the creator of a document.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.setProducer(CoherentGraphics.Cpdf.Pdf,System.String)">
+            <summary>
+            Sets the producer of a document.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.setCreationDate(CoherentGraphics.Cpdf.Pdf,System.String)">
+            <summary>
+            Sets the creation date of a document.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.setModificationDate(CoherentGraphics.Cpdf.Pdf,System.String)">
+            <summary>
+            Sets the modification date of a document.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.setTitleXMP(CoherentGraphics.Cpdf.Pdf,System.String)">
+            <summary>
+            Sets the XMP title of a document.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.setAuthorXMP(CoherentGraphics.Cpdf.Pdf,System.String)">
+            <summary>
+            Sets the XMP author of a document.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.setSubjectXMP(CoherentGraphics.Cpdf.Pdf,System.String)">
+            <summary>
+            Sets the XMP subject of a document.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.setKeywordsXMP(CoherentGraphics.Cpdf.Pdf,System.String)">
+            <summary>
+            Sets the XMP keywords of a document.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.setCreatorXMP(CoherentGraphics.Cpdf.Pdf,System.String)">
+            <summary>
+            Sets the XMP creator of a document.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.setProducerXMP(CoherentGraphics.Cpdf.Pdf,System.String)">
+            <summary>
+            Sets the XMP producer of a document.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.setCreationDateXMP(CoherentGraphics.Cpdf.Pdf,System.String)">
+            <summary>
+            Sets the XMP creation date of a document.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.setModificationDateXMP(CoherentGraphics.Cpdf.Pdf,System.String)">
+            <summary>
+            Sets the XMP modification date of a document.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.getDateComponents(System.String,System.Int32@,System.Int32@,System.Int32@,System.Int32@,System.Int32@,System.Int32@,System.Int32@,System.Int32@)">
+            <summary>
+            Returns the components from a PDF date string.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.dateStringOfComponents(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Builds a PDF date string from individual
+            components.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.getPageRotation(CoherentGraphics.Cpdf.Pdf,System.Int32)">
+            <summary>
+            Gets the viewing rotation for a
+            given page.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.hasBox(CoherentGraphics.Cpdf.Pdf,System.Int32,System.String)">
+            <summary>
+            Returns true, if that page has the
+            given box. E.g "/CropBox".
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.getMediaBox(CoherentGraphics.Cpdf.Pdf,System.Int32,System.Double@,System.Double@,System.Double@,System.Double@)">
+            <summary>
+            These functions get a box given the document, page number, min x, max x,
+            min y, max y in points. Only succeeds if such a box exists, as checked by
+            hasBox.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.getCropBox(CoherentGraphics.Cpdf.Pdf,System.Int32,System.Double@,System.Double@,System.Double@,System.Double@)">
+            <summary>
+            These functions get a box given the document, page number, min x, max x,
+            min y, max y in points. Only succeeds if such a box exists, as checked by
+            hasBox.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.getTrimBox(CoherentGraphics.Cpdf.Pdf,System.Int32,System.Double@,System.Double@,System.Double@,System.Double@)">
+            <summary>
+            These functions get a box given the document, page number, min x, max x,
+            min y, max y in points. Only succeeds if such a box exists, as checked by
+            hasBox.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.getArtBox(CoherentGraphics.Cpdf.Pdf,System.Int32,System.Double@,System.Double@,System.Double@,System.Double@)">
+            <summary>
+            These functions get a box given the document, page number, min x, max x,
+            min y, max y in points. Only succeeds if such a box exists, as checked by
+            hasBox.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.getBleedBox(CoherentGraphics.Cpdf.Pdf,System.Int32,System.Double@,System.Double@,System.Double@,System.Double@)">
+            <summary>
+            These functions get a box given the document, page number, min x, max x,
+            min y, max y in points. Only succeeds if such a box exists, as checked by
+            hasBox.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.setMediabox(CoherentGraphics.Cpdf.Pdf,System.Collections.Generic.List{System.Int32},System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            These functions set a box given the document, page range, min x, max x,
+            min y, max y in points.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.setCropBox(CoherentGraphics.Cpdf.Pdf,System.Collections.Generic.List{System.Int32},System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            These functions set a box given the document, page range, min x, max x,
+            min y, max y in points.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.setTrimBox(CoherentGraphics.Cpdf.Pdf,System.Collections.Generic.List{System.Int32},System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            These functions set a box given the document, page range, min x, max x,
+            min y, max y in points.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.setArtBox(CoherentGraphics.Cpdf.Pdf,System.Collections.Generic.List{System.Int32},System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            These functions set a box given the document, page range, min x, max x,
+            min y, max y in points.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.setBleedBox(CoherentGraphics.Cpdf.Pdf,System.Collections.Generic.List{System.Int32},System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            These functions set a box given the document, page range, min x, max x,
+            min y, max y in points.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.markTrapped(CoherentGraphics.Cpdf.Pdf)">
+            <summary>
+            Marks a document as trapped.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.markUntrapped(CoherentGraphics.Cpdf.Pdf)">
+            <summary>
+            Marks a document as untrapped.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.markTrappedXMP(CoherentGraphics.Cpdf.Pdf)">
+            <summary>
+            Marks a document as trapped in XMP metadata.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.markUntrappedXMP(CoherentGraphics.Cpdf.Pdf)">
+            <summary>
+            Marks a document as untrapped in XMP metadata.
+            </summary>
+        </member>
+        <member name="T:CoherentGraphics.Cpdf.Layout">
+            <summary>Layouts</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.Layout.SinglePage">
+            <summary>Single page</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.Layout.OneColumn">
+            <summary>One column</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.Layout.TwoColumnLeft">
+            <summary>Two column left</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.Layout.TwoColumnRight">
+            <summary>Two column right</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.Layout.TwoPageLeft">
+            <summary>Two page left</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.Layout.TwoPageRight">
+            <summary>Two page right</summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.setPageLayout(CoherentGraphics.Cpdf.Pdf,CoherentGraphics.Cpdf.Layout)">
+            <summary>
+            Sets the page layout for a document.
+            </summary>
+        </member>
+        <member name="T:CoherentGraphics.Cpdf.PageMode">
+            <summary>Page modes</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.PageMode.UseNone">
+            <summary>Use none</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.PageMode.UseOutlines">
+            <summary>Use outlines</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.PageMode.UseThumbs">
+            <summary>Use thumbs</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.PageMode.UseOC">
+            <summary>Use OC</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.PageMode.UseAttachments">
+            <summary>Use attachments</summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.setPageMode(CoherentGraphics.Cpdf.Pdf,CoherentGraphics.Cpdf.PageMode)">
+            <summary>
+            Sets the page mode for a document.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.hideToolbar(CoherentGraphics.Cpdf.Pdf,System.Boolean)">
+            <summary>
+            Sets the hide toolbar flag.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.hideMenubar(CoherentGraphics.Cpdf.Pdf,System.Boolean)">
+            <summary>
+            Sets the hide menubar flag.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.hideWindowUi(CoherentGraphics.Cpdf.Pdf,System.Boolean)">
+            <summary>
+            Sets the hide window UI flag.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.fitWindow(CoherentGraphics.Cpdf.Pdf,System.Boolean)">
+            <summary>
+            Sets the fit window flag.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.centerWindow(CoherentGraphics.Cpdf.Pdf,System.Boolean)">
+            <summary>
+            Sets the center window flag.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.displayDocTitle(CoherentGraphics.Cpdf.Pdf,System.Boolean)">
+            <summary>
+            Sets the display doc title flag.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.openAtPage(CoherentGraphics.Cpdf.Pdf,System.Boolean,System.Int32)">
+            <summary>
+            Sets the PDF to open, possibly with
+            zoom-to-fit, at the given page number.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.setMetadataFromFile(CoherentGraphics.Cpdf.Pdf,System.String)">
+            <summary>
+            Sets the XMP metadata of a
+            document, given a file name.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.setMetadataFromByteArray(CoherentGraphics.Cpdf.Pdf,System.Byte[])">
+            <summary>
+            Sets the XMP metadata from
+            an array of bytes.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.removeMetadata(CoherentGraphics.Cpdf.Pdf)">
+            <summary>
+            Removes the XMP metadata from a document.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.getMetadata(CoherentGraphics.Cpdf.Pdf)">
+            <summary>
+            Returns the XMP metadata from a document.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.createMetadata(CoherentGraphics.Cpdf.Pdf)">
+            <summary>
+            Builds fresh metadata as best it can from
+            existing metadata in the document.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.setMetadataDate(CoherentGraphics.Cpdf.Pdf,System.String)">
+            <summary>
+            Sets the metadata date for a PDF. The date
+            is given in PDF date format -- cpdf will convert it to XMP format. The
+            date 'now' means now.
+            </summary>
+        </member>
+        <member name="T:CoherentGraphics.Cpdf.PageLabelStyle">
+            <summary>Page label styles</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.PageLabelStyle.DecimalArabic">
+            <summary>1, 2, 3...</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.PageLabelStyle.UppercaseRoman">
+            <summary>I, II, III...</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.PageLabelStyle.LowercaseRoman">
+            <summary>i, ii, iii...</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.PageLabelStyle.UppercaseLetters">
+            <summary>A, B, C...</summary>
+        </member>
+        <member name="F:CoherentGraphics.Cpdf.PageLabelStyle.LowercaseLetters">
+            <summary>a, b, c...</summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.addPageLabels(CoherentGraphics.Cpdf.Pdf,CoherentGraphics.Cpdf.PageLabelStyle,System.String,System.Int32,System.Collections.Generic.List{System.Int32},System.Boolean)">
+            <summary>
+            Adds page labels. The prefix is prefix text for each label. The range is the page range the
+            labels apply to. Offset can be used to shift the numbering up or down.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.removePageLabels(CoherentGraphics.Cpdf.Pdf)">
+            <summary>
+            Removes the page labels from the document.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.getPageLabelStringForPage(CoherentGraphics.Cpdf.Pdf,System.Int32)">
+            <summary>
+            Calculates the full label
+            string for a given page, and returns it.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.startGetPageLabels(CoherentGraphics.Cpdf.Pdf)">
+            <summary>
+            Gets page label data. Call startGetPageLabels to find out how many
+            there are, then use these serial numbers to get the style, prefix, offset
+            and start value (note not a range). Call endGetPageLabels to clean up.
+            <para>&#160;</para>
+            For example, a document might have five pages of introduction with roman
+            numerals, followed by the rest of the pages in decimal arabic, numbered from
+            one:
+            <para>&#160;</para>
+            labelstyle = LowercaseRoman<br/>
+            labelprefix = ""<br/>
+            startpage = 1<br/>
+            startvalue = 1<br/>
+            <para>&#160;</para>
+            labelstyle = DecimalArabic<br/>
+            labelprefix = ""<br/>
+            startpage = 6<br/>
+            startvalue = 1<br/>
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.getPageLabelStyle(System.Int32)">
+            <summary>
+            Gets page label data. Call startGetPageLabels to find out how many
+            there are, then use these serial numbers to get the style, prefix, offset
+            and start value (note not a range). Call endGetPageLabels to clean up.
+            <para>&#160;</para>
+            For example, a document might have five pages of introduction with roman
+            numerals, followed by the rest of the pages in decimal arabic, numbered from
+            one:
+            <para>&#160;</para>
+            labelstyle = LowercaseRoman<br/>
+            labelprefix = ""<br/>
+            startpage = 1<br/>
+            startvalue = 1<br/>
+            <para>&#160;</para>
+            labelstyle = DecimalArabic<br/>
+            labelprefix = ""<br/>
+            startpage = 6<br/>
+            startvalue = 1<br/>
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.getPageLabelPrefix(System.Int32)">
+            <summary>
+            Gets page label data. Call startGetPageLabels to find out how many
+            there are, then use these serial numbers to get the style, prefix, offset
+            and start value (note not a range). Call endGetPageLabels to clean up.
+            <para>&#160;</para>
+            For example, a document might have five pages of introduction with roman
+            numerals, followed by the rest of the pages in decimal arabic, numbered from
+            one:
+            <para>&#160;</para>
+            labelstyle = LowercaseRoman<br/>
+            labelprefix = ""<br/>
+            startpage = 1<br/>
+            startvalue = 1<br/>
+            <para>&#160;</para>
+            labelstyle = DecimalArabic<br/>
+            labelprefix = ""<br/>
+            startpage = 6<br/>
+            startvalue = 1<br/>
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.getPageLabelOffset(System.Int32)">
+            <summary>
+            Gets page label data. Call startGetPageLabels to find out how many
+            there are, then use these serial numbers to get the style, prefix, offset
+            and start value (note not a range). Call endGetPageLabels to clean up.
+            <para>&#160;</para>
+            For example, a document might have five pages of introduction with roman
+            numerals, followed by the rest of the pages in decimal arabic, numbered from
+            one:
+            <para>&#160;</para>
+            labelstyle = LowercaseRoman<br/>
+            labelprefix = ""<br/>
+            startpage = 1<br/>
+            startvalue = 1<br/>
+            <para>&#160;</para>
+            labelstyle = DecimalArabic<br/>
+            labelprefix = ""<br/>
+            startpage = 6<br/>
+            startvalue = 1<br/>
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.getPageLabelRange(System.Int32)">
+            <summary>
+            Gets page label data. Call startGetPageLabels to find out how many
+            there are, then use these serial numbers to get the style, prefix, offset
+            and start value (note not a range). Call endGetPageLabels to clean up.
+            <para>&#160;</para>
+            For example, a document might have five pages of introduction with roman
+            numerals, followed by the rest of the pages in decimal arabic, numbered from
+            one:
+            <para>&#160;</para>
+            labelstyle = LowercaseRoman<br/>
+            labelprefix = ""<br/>
+            startpage = 1<br/>
+            startvalue = 1<br/>
+            <para>&#160;</para>
+            labelstyle = DecimalArabic<br/>
+            labelprefix = ""<br/>
+            startpage = 6<br/>
+            startvalue = 1<br/>
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.endGetPageLabels">
+            <summary>
+            Gets page label data. Call startGetPageLabels to find out how many
+            there are, then use these serial numbers to get the style, prefix, offset
+            and start value (note not a range). Call endGetPageLabels to clean up.
+            <para>&#160;</para>
+            For example, a document might have five pages of introduction with roman
+            numerals, followed by the rest of the pages in decimal arabic, numbered from
+            one:
+            <para>&#160;</para>
+            labelstyle = LowercaseRoman<br/>
+            labelprefix = ""<br/>
+            startpage = 1<br/>
+            startvalue = 1<br/>
+            <para>&#160;</para>
+            labelstyle = DecimalArabic<br/>
+            labelprefix = ""<br/>
+            startpage = 6<br/>
+            startvalue = 1<br/>
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.dummych12">
+            <summary>CHAPTER 12. File Attachments</summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.attachFile(System.String,CoherentGraphics.Cpdf.Pdf)">
+            <summary>
+            Attaches a file to the pdf. It is attached
+            at document level.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.attachFileToPage(System.String,CoherentGraphics.Cpdf.Pdf,System.Int32)">
+            <summary> 
+            Attaches a file, given
+            its file name, pdf, and the page number to which it should be attached.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.attachFileFromMemory(System.Byte[],System.String,CoherentGraphics.Cpdf.Pdf)">
+            <summary>
+            Attaches data from
+            memory, just like attachFile.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.attachFileToPageFromMemory(System.Byte[],System.String,CoherentGraphics.Cpdf.Pdf,System.Int32)">
+            <summary>
+            Attaches to a page from memory, just like attachFileToPage.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.removeAttachedFiles(CoherentGraphics.Cpdf.Pdf)">
+            <summary>
+            Removes all page- and document-level attachments from a document.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.startGetAttachments(CoherentGraphics.Cpdf.Pdf)">
+            <summary>
+            Lists information about attachments. Call startGetAttachments(pdf)
+            first, then numberGetAttachments to find out how many there are. Then
+            getAttachmentName etc. to return each one 0...(n - 1). Finally, call
+            endGetAttachments to clean up.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.numberGetAttachments">
+            <summary>
+            Lists information about attachments. Call startGetAttachments(pdf)
+            first, then numberGetAttachments to find out how many there are. Then
+            getAttachmentName etc. to return each one 0...(n - 1). Finally, call
+            endGetAttachments to clean up.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.getAttachmentName(System.Int32)">
+            <summary>
+            Gets the name of an attachment.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.getAttachmentPage(System.Int32)">
+            <summary>
+            Gets the page number. 0 = document level.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.getAttachmentData(System.Int32)">
+            <summary>
+            Gets the attachment data itself.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.endGetAttachments">
+            <summary>
+            Cleans up after getting attachments.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.dummych13">
+            <summary>CHAPTER 13. Images.</summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.startGetImageResolution(CoherentGraphics.Cpdf.Pdf,System.Double)">
+            <summary>
+            Gets image data, including resolution at all points of use. Call
+            startGetImageResolution(pdf, min_required_resolution) will begin the
+            process of obtaining data on all image uses below min_required_resolution,
+            returning the total number. So, to return all image uses, specify a very
+            high min_required_resolution. Then, call the other functions giving a
+            serial number 0..n - 1, to retrieve the data. Finally, call
+            endGetImageResolution to clean up.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.getImageResolutionPageNumber(System.Int32)">
+            <summary>
+            Gets image data, including resolution at all points of use. Call
+            startGetImageResolution(pdf, min_required_resolution) will begin the
+            process of obtaining data on all image uses below min_required_resolution,
+            returning the total number. So, to return all image uses, specify a very
+            high min_required_resolution. Then, call the other functions giving a
+            serial number 0..n - 1, to retrieve the data. Finally, call
+            endGetImageResolution to clean up.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.getImageResolutionImageName(System.Int32)">
+            <summary>
+            Gets image data, including resolution at all points of use. Call
+            startGetImageResolution(pdf, min_required_resolution) will begin the
+            process of obtaining data on all image uses below min_required_resolution,
+            returning the total number. So, to return all image uses, specify a very
+            high min_required_resolution. Then, call the other functions giving a
+            serial number 0..n - 1, to retrieve the data. Finally, call
+            endGetImageResolution to clean up.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.getImageResolutionXPixels(System.Int32)">
+            <summary>
+            Gets image data, including resolution at all points of use. Call
+            startGetImageResolution(pdf, min_required_resolution) will begin the
+            process of obtaining data on all image uses below min_required_resolution,
+            returning the total number. So, to return all image uses, specify a very
+            high min_required_resolution. Then, call the other functions giving a
+            serial number 0..n - 1, to retrieve the data. Finally, call
+            endGetImageResolution to clean up.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.getImageResolutionYPixels(System.Int32)">
+            <summary>
+            Gets image data, including resolution at all points of use. Call
+            startGetImageResolution(pdf, min_required_resolution) will begin the
+            process of obtaining data on all image uses below min_required_resolution,
+            returning the total number. So, to return all image uses, specify a very
+            high min_required_resolution. Then, call the other functions giving a
+            serial number 0..n - 1, to retrieve the data. Finally, call
+            endGetImageResolution to clean up.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.getImageResolutionXRes(System.Int32)">
+            <summary>
+            Gets image data, including resolution at all points of use. Call
+            startGetImageResolution(pdf, min_required_resolution) will begin the
+            process of obtaining data on all image uses below min_required_resolution,
+            returning the total number. So, to return all image uses, specify a very
+            high min_required_resolution. Then, call the other functions giving a
+            serial number 0..n - 1, to retrieve the data. Finally, call
+            endGetImageResolution to clean up.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.getImageResolutionYRes(System.Int32)">
+            <summary>
+            Gets image data, including resolution at all points of use. Call
+            startGetImageResolution(pdf, min_required_resolution) will begin the
+            process of obtaining data on all image uses below min_required_resolution,
+            returning the total number. So, to return all image uses, specify a very
+            high min_required_resolution. Then, call the other functions giving a
+            serial number 0..n - 1, to retrieve the data. Finally, call
+            endGetImageResolution to clean up.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.endGetImageResolution">
+            <summary>
+            Gets image data, including resolution at all points of use. Call
+            startGetImageResolution(pdf, min_required_resolution) will begin the
+            process of obtaining data on all image uses below min_required_resolution,
+            returning the total number. So, to return all image uses, specify a very
+            high min_required_resolution. Then, call the other functions giving a
+            serial number 0..n - 1, to retrieve the data. Finally, call
+            endGetImageResolution to clean up.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.dummych14">
+            <summary>CHAPTER 14. Fonts.</summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.startGetFontInfo(CoherentGraphics.Cpdf.Pdf)">
+            <summary>
+            Retrieves font information. First, call startGetFontInfo(pdf). Now
+            call numberFonts to return the number of fonts. For each font, call
+            one or more of getFontPage, getFontName, getFontType, and
+            getFontEncoding giving a serial number 0..n - 1 to
+            return information. Finally, call endGetFontInfo to clean up.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.numberFonts">
+            <summary>
+            Retrieves font information. First, call startGetFontInfo(pdf). Now
+            call numberFonts to return the number of fonts. For each font, call
+            one or more of getFontPage, getFontName, getFontType, and
+            getFontEncoding giving a serial number 0..n - 1 to
+            return information. Finally, call endGetFontInfo to clean up.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.getFontPage(System.Int32)">
+            <summary>
+            Retrieves font information. First, call startGetFontInfo(pdf). Now
+            call numberFonts to return the number of fonts. For each font, call
+            one or more of getFontPage, getFontName, getFontType, and
+            getFontEncoding giving a serial number 0..n - 1 to
+            return information. Finally, call endGetFontInfo to clean up.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.getFontName(System.Int32)">
+            <summary>
+            Retrieves font information. First, call startGetFontInfo(pdf). Now
+            call numberFonts to return the number of fonts. For each font, call
+            one or more of getFontPage, getFontName, getFontType, and
+            getFontEncoding giving a serial number 0..n - 1 to
+            return information. Finally, call endGetFontInfo to clean up.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.getFontType(System.Int32)">
+            <summary>
+            Retrieves font information. First, call startGetFontInfo(pdf). Now
+            call numberFonts to return the number of fonts. For each font, call
+            one or more of getFontPage, getFontName, getFontType, and
+            getFontEncoding giving a serial number 0..n - 1 to
+            return information. Finally, call endGetFontInfo to clean up.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.getFontEncoding(System.Int32)">
+            <summary>
+            Retrieves font information. First, call startGetFontInfo(pdf). Now
+            call numberFonts to return the number of fonts. For each font, call
+            one or more of getFontPage, getFontName, getFontType, and
+            getFontEncoding giving a serial number 0..n - 1 to
+            return information. Finally, call endGetFontInfo to clean up.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.endGetFontInfo">
+            <summary>
+            Retrieves font information. First, call startGetFontInfo(pdf). Now
+            call numberFonts to return the number of fonts. For each font, call
+            one or more of getFontPage, getFontName, getFontType, and
+            getFontEncoding giving a serial number 0..n - 1 to
+            return information. Finally, call endGetFontInfo to clean up.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.removeFonts(CoherentGraphics.Cpdf.Pdf)">
+            <summary>
+            Removes all font data from a file.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.copyFont(CoherentGraphics.Cpdf.Pdf,CoherentGraphics.Cpdf.Pdf,System.Collections.Generic.List{System.Int32},System.Int32,System.String)">
+            <summary>
+            Copies the given font
+            from the given page in the 'from' PDF to every page in the 'to' PDF. The
+            new font is stored under its font name.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.dummych15">
+            <summary>CHAPTER 15. PDF and JSON</summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.outputJSON(System.String,System.Boolean,System.Boolean,System.Boolean,CoherentGraphics.Cpdf.Pdf)">
+            <summary>
+            Outputs a PDF
+            in JSON format to the given filename. If parse_content is true, page content
+            is parsed. If no_stream_data is true, all stream data is suppressed entirely.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.outputJSONMemory(CoherentGraphics.Cpdf.Pdf,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            Like
+            outputJSON, but it writes to a byte array in memory.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.fromJSON(System.String)">
+            <summary>
+            Loads a PDF from a JSON file given its filename.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.fromJSONMemory(System.Byte[])">
+            <summary>
+            Loads a PDF from a JSON file in memory
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.dummych16">
+            <summary>CHAPTER 16. Optional Content Groups</summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.startGetOCGList(CoherentGraphics.Cpdf.Pdf)">
+            <summary>
+            Begins retrieving optional content group names. The serial number 0..n - 1
+            is returned.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.OCGListEntry(System.Int32)">
+            <summary>
+            Retrieves an OCG name, given its serial number 0..n - 1.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.endGetOCGList">
+            <summary>
+            Ends retrieval of optional content group names.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.OCGRename(CoherentGraphics.Cpdf.Pdf,System.String,System.String)">
+            <summary>
+            Renames an optional content group.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.OCGOrderAll(CoherentGraphics.Cpdf.Pdf)">
+            <summary>
+            Ensures that every optional content group appears in the OCG order list.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.OCGCoalesce(CoherentGraphics.Cpdf.Pdf)">
+            <summary>
+            Coalesces optional content groups. For example, if we merge or stamp two
+            files both with an OCG called "Layer 1", we will have two different optional
+            content groups. This function will merge the two into a single optional
+            content group.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.dummych17">
+            <summary>CHAPTER 17. Creating New PDFs</summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.blankDocument(System.Double,System.Double,System.Int32)">
+            <summary>
+            Creates a blank document with
+            pages of the given width (in points), height (in points), and number of
+            pages.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.blankDocumentPaper(CoherentGraphics.Cpdf.Papersize,System.Int32)">
+            <summary>
+            Makes a blank document given
+            a page size and number of pages.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.textToPDF(System.Double,System.Double,CoherentGraphics.Cpdf.Font,System.Double,System.String)">
+            <summary>
+            Typesets a UTF8 text file
+            ragged right on a page of size w * h in points in the given font and font
+            size.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.textToPDFPaper(CoherentGraphics.Cpdf.Papersize,CoherentGraphics.Cpdf.Font,System.Double,System.String)">
+            <summary>
+            Typesets a UTF8 text file
+            ragged right on a page of the given size in the given font and font size.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.dummych18">
+            <summary>CHAPTER 18. Miscellaneous</summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.draft(CoherentGraphics.Cpdf.Pdf,System.Collections.Generic.List{System.Int32},System.Boolean)">
+            <summary>
+            Removes images on the given pages, replacing
+            them with crossed boxes if 'boxes' is true.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.removeAllText(CoherentGraphics.Cpdf.Pdf,System.Collections.Generic.List{System.Int32})">
+            <summary>
+            Removes all text from the given pages in a
+            given document.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.blackText(CoherentGraphics.Cpdf.Pdf,System.Collections.Generic.List{System.Int32})">
+            <summary>
+            Blackens all text on the given pages.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.blackLines(CoherentGraphics.Cpdf.Pdf,System.Collections.Generic.List{System.Int32})">
+            <summary>
+            Blackens all lines on the given pages.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.blackFills(CoherentGraphics.Cpdf.Pdf,System.Collections.Generic.List{System.Int32})">
+            <summary>
+            Blackens all fills on the given pages.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.thinLines(CoherentGraphics.Cpdf.Pdf,System.Collections.Generic.List{System.Int32},System.Double)">
+            <summary> 
+            Thickens every line less than
+            min_thickness to min_thickness. Thickness given in points.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.copyId(CoherentGraphics.Cpdf.Pdf,CoherentGraphics.Cpdf.Pdf)">
+            <summary>
+            Copies the /ID from one document to another.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.removeId(CoherentGraphics.Cpdf.Pdf)">
+            <summary>
+            Removes a document's /ID.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.setVersion(CoherentGraphics.Cpdf.Pdf,System.Int32)">
+            <summary>
+            Sets the minor version number of a document.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.setFullVersion(CoherentGraphics.Cpdf.Pdf,System.Int32,System.Int32)">
+            <summary>
+            Sets the full version
+            number of a document.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.removeDictEntry(CoherentGraphics.Cpdf.Pdf,System.String)">
+            <summary>
+            Removes any dictionary entry with the given
+            key anywhere in the document.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.removeDictEntrySearch(CoherentGraphics.Cpdf.Pdf,System.String,System.String)">
+            <summary>
+            Removes any dictionary entry
+            with the given key whose value matches the given search term.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.replaceDictEntry(CoherentGraphics.Cpdf.Pdf,System.String,System.String)">
+            <summary>
+            Replaces the value associated with
+            the given key.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.replaceDictEntrySearch(CoherentGraphics.Cpdf.Pdf,System.String,System.String,System.String)">
+            <summary>
+            Replaces the value
+            associated with the given key if the existing value matches the search term.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.removeClipping(CoherentGraphics.Cpdf.Pdf,System.Collections.Generic.List{System.Int32})">
+            <summary>
+            Removes all clipping from pages in the
+            given range.
+            </summary>
+        </member>
+        <member name="M:CoherentGraphics.Cpdf.getDictEntries(CoherentGraphics.Cpdf.Pdf,System.String)">
+            <summary>
+            Returns a JSON array containing any
+            and all values associated with the given key, and fills in its length.
+            </summary>
+        </member>
+    </members>
+</doc>

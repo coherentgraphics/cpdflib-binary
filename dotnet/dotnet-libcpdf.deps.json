@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v5.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v5.0": {
+      "dotnet-libcpdf/2.5.2": {
+        "runtime": {
+          "dotnet-libcpdf.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "dotnet-libcpdf/2.5.2": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

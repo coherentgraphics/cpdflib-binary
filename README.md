@@ -8,8 +8,8 @@ http://github.com/coherentgraphics/cpdf-binaries
 
 and also in source form.
 
-coherentpdf.js is distributed under the AGPL - see LICENSE.md. If you are unable
-to abide by the terms of the AGPL, you will need a commercial license.
+It is distributed under the AGPL - see LICENSE.md. If you are unable to abide
+by the terms of the AGPL, you will need a commercial license.
 
 For commercial licenses, email
 [contact@coherentgraphics.co.uk](mailto:contact@coherentgraphics.co.uk) or
